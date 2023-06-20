@@ -4,10 +4,7 @@ Disentanglement, as an important issue of interpretable AI, has attracted vast a
 
 ## Approach
 
-
-
 ![](./Figure/structure.png)
-=======
 
 ## Dependencies
 
@@ -28,292 +25,18 @@ We also provide [pre trained model weights](https://drive.google.com/drive/folde
 
 Each model can be trained by the following formats:
 
-- **MNIST**
-
-  Changing directory to :
-
-  ```bash
-  cd ./CoDeGAN/MNIST/
-  ```
-
-  Opening ``param.yml`` to set hyparameters:
-
-  ```python
-  beta_1: 75 
-  beta_2: 0.0005
-  ```
-
-  Runing:
-
-  ```bash
-  $ python train.py
-  ```
-
-- **Fashion-MNIST**
-
-  Changing directory to:
-
-  ```bash
-  cd ./CoDeGAN/Fashion-MNIST/
-  ```
-
-  Opening ``param.yml`` to set hyparameters:
-
-  - For unsupervised experiments:
-
-  ```python
-  beta_1: 100
-  beta_2: 0.0005
-  max_step: 600
-  chain_step: 0
-  few_labels: False
-  pretrain: False
-  meta: False
-  ```
-
-  - For unsupervised witch pretraining experiments:
-
-  ```python
-  beta_1: 100
-  beta_2: 0.0005
-  max_step: 600
-  chain_step: 200
-  few_labels: False
-  pretrain: True
-  meta: False
-  ```
-
-  - For few labels experiments(100 labels):
-
-  ```python
-  beta_1: 100
-  beta_2: 0.0005
-  max_step: 600
-  chain_step: 0
-  few_labels: True
-  pretrain: False
-  meta: False
-  ```
-
-  - For few labels with meta pretraining experiments(100 labels):
-
-  ```python
-  beta_1: 100
-  beta_2: 0.0005
-  max_step: 600
-  chain_step: 200
-  few_labels: True
-  pretrain: True
-  meta: True
-  ```
-
-  - For few labels with pretraining experiments(100 labels):
-
-  ```python
-  beta_1: 100
-  beta_2: 0.0005
-  max_step: 300
-  chain_step: 200
-  few_labels: True
-  pretrain: True
-  meta: False
-  ```
-
-  Runing:
-
-  ```bash
-  $ python train.py
-  ```
-
-- **CIFAR-10**
-
-  Changing directory to:
-
-  ```bash
-  cd ./CoDeGAN/CIFAR-10/
-  ```
-
-  Opening ``param.yml`` to set hyparameters:
-
-  - For unsupervised experiments:
-
-  ```python
-  beta_1: 10
-  beta_2: 5
-  chain_step: 0
-  max_step  : 350
-  few_labels: False
-  pretrain: False
-  meta: False
-  ```
-
-  - For unsupervised with pretrain experiments:
-
-  ```python
-  beta_1: 1.5
-  beta_2: 0.5
-  chain_step: 0
-  max_step  : 300
-  few_labels: False
-  pretrain: True
-  meta: False
-  ```
-
-  - For few labels experiments(500 labels):
-
-  ```python
-  beta_1: 1
-  beta_2: 0.5
-  chain_step: 0
-  max_step  : 350
-  few_labels: True
-  pretrain: False
-  meta: False
-  ```
-
-  - For few labels with meta pretraining experiments(500 labels):
-
-  ```python
-  beta_1: 0.25
-  beta_2: 2.5
-  chain_step: 100
-  max_step  : 300
-  few_labels: True
-  pretrain: True
-  meta: True
-  ```
-
-  - For few labels with pretraining experiments(500 labels):
-
-  ```python
-  beta_1: 0.25
-  beta_2: 0.5
-  chain_step: 100
-  max_step  : 250
-  few_labels: True
-  pretrain: True
-  meta: False
-  ```
-
-  Runing:
-
-  ```bash
-  $ python train.py
-  ```
-
-**COIL-20**
-
-Changing directory to:
 
 ```bash
-cd ./CoDeGAN/COIL-20/
+cd ./<dataset_name>
+python train.py
 ```
 
-Opening ``param.yml`` to set hyparameters:
-
-- For unsupervised experiments:
-
-```python
-beta_1: 150
-beta_2: 0.0005
-chain_step: 0
-max_step  : 4500
-pretrain: False
-```
-
-- For unsupervised with pretrain experiments:
-
-```python
-beta_1: 100
-beta_2: 0.0005
-chain_step: 1500
-max_step  : 4500
-pretrain: True
-```
-
-- Runing:
-
-  ```bash
-  $ python train.py
-  ```
-
-**3D-Chairs**
-
-Changing directory to:
-
-```bash
-cd ./CoDeGAN/3D-Chairs/
-```
-
-Opening ``param.yml`` to set hyparameters:
-
-- For unsupervised experiments:
-
-```python
-beta_1: 100
-beta_2: 0.0005
-chain_step: 0
-max_step  : 3000
-pretrain: False
-```
-
-- For unsupervised with pretrain experiments:
-
-```python
-beta_1: 75
-beta_2: 0.0005
-chain_step: 1000
-max_step  : 3000
-pretrain: True
-```
-
-- Runing:
-
-  ```bash
-  $ python train.py
-  ```
-
-**3D-Cars**
-
-Changing directory to:
-
-```bash
-cd ./CoDeGAN/3D-Cars/
-```
-
-Opening ``param.yml`` to set hyparameters:
-
-- For unsupervised experiments:
-
-```python
-beta_1: 100
-beta_2: 0.0005
-chain_step: 0
-max_step  : 25000
-pretrain: False
-```
-
-- For unsupervised with pretrain experiments:
-
-```python
-beta_1: 80
-beta_2: 0.0005
-chain_step: 200
-max_step  : 2500
-pretrain: True
-```
-
-- Runing:
-
-  ```bash
-  python train.py
-  ```
 
 ## Testing
 
 - **ACC, NMI, ARI**
 
-  The ACC, NMI, ARI are calculated by ``./CoDeGAN/<dataset_name>/test.py`` in MNIST and Fashion-MNIST, ``./CoDeGAN/<dataset_name>/test/test_acc.py`` in CIFAR-10, which will be calculated automatically during training, the test result will be saved in  ``./CoDeGAN/<dataset_name>/result/<rand int>/test_result.txt``.
+  The ACC, NMI, ARI are calculated by ``./<dataset_name>/test.py`` in MNIST and Fashion-MNIST, ``./<dataset_name>/test/test_acc.py`` in CIFAR-10, which will be calculated automatically during training, the test result will be saved in  ``./<dataset_name>/result/<rand int>/test_result.txt``.
 
 - **IS, FID**
 
@@ -321,7 +44,7 @@ pretrain: True
 
   Downloading 
 
-  Opening  ``./CoDeGAN/CIFAR-10/utils/sample_fake_images2npy.py``
+  Opening  ``./CIFAR-10/utils/sample_fake_images2npy.py``
 
   Setting ``model_dir`` to be the directory where the final trained models are saved.
 
@@ -343,11 +66,5 @@ pretrain: True
 
 ## Result
 
-![](./Figure/codegan.png)
-
-<center></center>Qualitative comparison with state-of-the-art methods on the Fashion-MNIST, COIL-20 and CIFAR-10 datasets.</center>
-
-
-
-
-
+<div align=center><img src="./Figure/codegan.png"></div>
+<div align="center">Qualitative comparison with state-of-the-art methods on the Fashion-MNIST, COIL-20 and CIFAR-10 datasets.</div>
