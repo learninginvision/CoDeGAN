@@ -1,0 +1,38 @@
+# batch size
+g_batch_size : 48
+d_batch_size : 60
+ec_batch_size: 80
+ez_batch_size: 40
+
+# learning rate
+lr: 0.0002
+
+# noise dimension
+zn_dim: 118
+zc_dim: 10
+
+# encoded class feature's dimension
+fc_dim: 128
+
+# the weight of znloss and zcloss
+beta_1: 100
+beta_2: 0.0005
+
+# train and save step 
+critic    : 1
+save_step : 50
+chain_step: 0
+test_step : 50
+max_step  : 4000
+
+# which loss is choosed
+loss_metric: 'wgan-gp'
+
+# the tempeture of zcloss 
+temp_C: 0.07
+
+# train mode
+pretrain: False
+
+# which gpu is choosed
+gpu_id: 0
