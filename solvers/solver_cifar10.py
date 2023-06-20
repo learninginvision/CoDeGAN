@@ -242,19 +242,3 @@ class Solver():
         torch.save(self.D.state_dict(),  save_path + "/{}_D.pth".format(epoch  + 1))
         torch.save(self.EZ.state_dict(), save_path + "/{}_EZ.pth".format(epoch + 1))
         torch.save(self.EC.state_dict(), save_path + "/{}_EC.pth".format(epoch + 1))
-        
-    def sample_noise(self, batch):
-        
-        set_index = categorical.Categorical\
-        (torch.tensor([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]))
-
-        zn      = torch.randn(batch_size, self.zn_dim)
-        m_zeros = torch.zeros(batch_size, self.zc_dim)
-        zc_idx  = [set_index.sample().view(-1,1) for _ in range(batch_size)]
-        zc_idx  = torch.cat(zc_idx, dim=0)
-        zc      = m_zeros.scatter_(1, zc_idx, 1)
-        z       = torch.cat((zn, zc), dim=1)
-        if self.device != 'cpu':
-            return z.to(self.device), zn.to(self.device), zc_idx.squeeze().to(self.device)
-
-        return z, zn, zc_idx.squeeze()

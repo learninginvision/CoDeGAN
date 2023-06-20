@@ -38,4 +38,16 @@ meta: False  # pretrain with MAML
 r_batch_size: 50
 
 # which gpu is choosed
-gpu_id: 2
+gpu_id: 0
+
+# adjust_lr
+adjust_lr: False
+
+# Pre-train model load paths
+load_path: './fashionmnist_data/few_labels'
+
+# few-label paths
+few_labels_path: './fashionmnist_data/100_real_images.pt'
+
+# Dataset name:
+dataset: 'fashion'

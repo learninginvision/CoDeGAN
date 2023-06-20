@@ -1,32 +1,30 @@
 # batch size
-g_batch_size : 128
-d_batch_size : 64
-ec_batch_size: 256
-ez_batch_size: 32
+g_batch_size: 64
+d_batch_size: 64
+e_batch_size: 300
 
 # learning rate
-lr: 0.0002
+lr: 0.0001
 
 # noise dimension
-zn_dim: 118
 zc_dim: 10
+zn_dim: 40
 
 # encoded class feature's dimension
-fc_dim: 128
+fc_dim: 120
 
 # the weight of znloss and zcloss
-beta_1: 1
-beta_2: 0.5
+beta_1: 100
+beta_2: 0.0005
 
-# train and save step 
-critic    : 3
+# train and save step
+max_step  : 600
 save_step : 50
-chain_step: 0
 test_step : 10
-max_step  : 350
+chain_step: 0
 
-# which loss is choosed
-loss_metric: 'hinge'
+# whether use wgan-gp loss or not
+wgan_gp: True
 
 # the tempeture of zcloss 
 temp_C: 0.07
@@ -34,23 +32,23 @@ temp_C: 0.07
 # train mode
 few_labels: True
 pretrain: False
-meta: False
-use_ema: False
+meta: False  # pretrain with MAML
 
 # aditional supervised data
-r_batch_size: 100
+r_batch_size: 50
 
 # which gpu is choosed
 gpu_id: 0
 
+
 # adjust_lr
-adjust_lr: True
+adjust_lr: False
 
 # Pre-train model load paths
 load_path: '.'
 
 # few-label paths
-few_labels_path: './cifar10_data/500_real_images.pt'
+few_labels_path: './fashionmnist_data/100_real_images.pt'
 
 # Dataset name:
-dataset_name: 'cifar10'
+dataset: 'fashion'

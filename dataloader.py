@@ -60,12 +60,12 @@ def COIL20(batch_size, root='./dataset/coil20/', train_class=20):
     print('successfully loaded {} coil-20 data'.format(len(trainset)))
     return loader
 
-def get_dataloader(batch_size = 10, dataset_name = 'CIFAR10', train = True):
-    assert dataset_name in ['CIFAR10', 'FashionMNIST', 'COIL20' ] , "`dataset_name` must be one of the following values : `CIFAR10`, `FashionMNIST`, `COIL20`"
-    if dataset_name == 'CIFAR10':
+def get_dataloader(batch_size = 10, dataset_name = 'cifar10', train = True):
+    assert dataset_name in ['cifar10', 'fashion', 'coil20' ] , "`dataset_name` must be one of the following values : `CIFAR10`, `FashionMNIST`, `COIL20`"
+    if dataset_name == 'cifar10':
         return CIFAR10(batch_size=batch_size, train = train)
-    elif dataset_name == 'FashionMNIST':
+    elif dataset_name == 'fashion':
         return FashionMNIST(batch_size=batch_size, train=train)
-    elif dataset_name == 'COIL20':
+    elif dataset_name == 'coil20':
         return COIL20(batch_size=batch_size)
         

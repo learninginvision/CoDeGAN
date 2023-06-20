@@ -4,7 +4,7 @@ import torch
 import numpy as np
 sys.path.append('..')
 from PIL import Image
-from solver_cifar10 import Solver
+from solvers.solver import get_solvers
 from utils.util import sample_noise
 
 
@@ -14,9 +14,9 @@ def make_batches(size, batch_size):
     return [(i, min(size, i + batch_size)) for i in range(0, size, batch_size)]
 
 if __name__ == "__main__":
-    model_dir = "./250_G.pth"  # the path you save your model
+    model_dir = "<path of model>"  # the path you save your model
     config = yaml.load(open('./param.yml'), Loader=yaml.FullLoader)
-    solver = Solver(config)
+    solver = get_solvers(config)
     solver.G.load_state_dict(torch.load(model_dir, map_location=solver.device))
     solver.G.to(solver.device)
     solver.G.eval()

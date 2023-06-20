@@ -41,16 +41,16 @@ use_ema: False
 r_batch_size: 100
 
 # which gpu is choosed
-gpu_id: 4
+gpu_id: 0
 
 # adjust_lr
 adjust_lr: True
 
 # Pre-train model load paths
-load_path: './cifar10_data/meta'
+load_path: './cifar10_data/few_labels'
 
 # few-label paths
-few_labels_path: ./cifar10_data/500_real_images.pt
+few_labels_path: './cifar10_data/500_real_images.pt'
 
 # Dataset name:
-dataset_name: 'CIFAR10'
+dataset_name: 'cifar10'

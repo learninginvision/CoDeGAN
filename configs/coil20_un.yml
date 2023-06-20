@@ -1,0 +1,50 @@
+# batch size
+g_batch_size : 256
+d_batch_size : 128
+ec_batch_size: 512
+ez_batch_size: 64
+
+# learning rate
+lr: 0.0002
+
+# noise dimension
+zn_dim: 118
+zc_dim: 20
+
+# encoded class feature's dimension
+fc_dim: 128
+
+# the weight of znloss and zcloss
+beta_1: 150
+beta_2: 0.0005
+
+# train and save step 
+critic    : 1
+save_step : 100
+chain_step: 0
+test_step : 50
+max_step  : 4500
+
+# which loss is choosed
+loss_metric: 'wgan-gp'
+
+# the tempeture of zcloss 
+temp_C: 0.07
+
+# choose train mode
+pretrain: False
+
+# which gpu is choosed
+gpu_id: 0
+
+# adjust_lr
+adjust_lr: False
+
+# Pre-train model load paths
+load_path: './coil20_data/'
+
+# few-label paths
+few_labels_path: '.'
+
+# Dataset name:
+dataset: 'coil20'

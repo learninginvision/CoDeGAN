@@ -34,7 +34,7 @@ def calculate_acc(label_kmeans, labels, num, num_class):
     return acc
 
 
-def test_acc_E(E, epoch_num, save_path, dataset_name='CIFAR10'):
+def test_acc_E(E, epoch_num, save_path, dataset_name='cifar10'):
     torch.multiprocessing.set_sharing_strategy('file_system')
     device     = next(E.parameters()).device
     num        = 10000

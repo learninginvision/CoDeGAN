@@ -51,7 +51,6 @@ if __name__ == "__main__":
     
     # get solver
     solver = get_solvers(config)
-    # dataset    = getloader(d_batch_size)
     dataset = get_dataloader(d_batch_size, config['dataset'])
 
     # load pretrain_model if needed
@@ -62,7 +61,13 @@ if __name__ == "__main__":
             solver.D.load_state_dict(torch.load(load_path + '/pre_D.pth', map_location=solver.device))
             if use_ema:
                 solver.G_EMA.load_state_dict(torch.load(load_path + '/pre_G.pth', map_location=solver.device))
-        solver.EC.load_state_dict(torch.load(load_path + '/pre_EC.pth', map_location=solver.device))
+        if hasattr(solver, 'EC'):
+            solver.EC.load_state_dict(torch.load(load_path + '/pre_EC.pth', map_location=solver.device))
+        if hasattr(solver, 'E'):
+            solver.EC.load_state_dict(torch.load(load_path + '/pre_E.pth', map_location=solver.device))
+        if hasattr(solver, 'Classifier'):
+            solver.Classifier.load_state_dict(torch.load(load_path + '/classifier.pth', map_location=solver.device))
+
 
     print("start...")
 

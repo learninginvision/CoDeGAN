@@ -11,15 +11,15 @@ Disentanglement, as an important issue of interpretable AI, has attracted vast a
 - Python 3.6.13
 - Pytorch 1.7.1
 - Numpy 1.19.2
-- TensorFlow 1.12.0
+- TensorFlow 1.12.0 `<is not must>`
 
 ## Datasets
 
-The MNIST, Fashion-MNIST and CIFAR-10 datasets needn't to be downloaded in advance, the code automatically downloads the data to directory ``"./CoDeGAN/data/<dataset_name>"`` during operation , if you download the data yourself, make sure they are on the same directory.
+The MNIST, Fashion-MNIST and CIFAR-10 datasets needn't to be downloaded in advance, the code automatically downloads the data to directory ``"./data/<dataset_name>"`` during operation , if you download the data yourself, make sure they are on the same directory.
 
 ## Training
 
-You can train your own models on the datasets mentioned, the few labels used in our experiments and the corresponding pretrained models are saved in directory ``"../CoDeGAN/<dataset_name>/few_labels"``, they are used only in few labels experiments. When selecting few labels images, we only make sure that the number of images for each class is equal, without additional filtering.
+You can train your own models on the datasets mentioned, the few labels used in our experiments and the corresponding pretrained models are saved in directory ``"../<dataset_name>/few_labels"``, they are used only in few labels experiments. When selecting few labels images, we only make sure that the number of images for each class is equal, without additional filtering.
 
 We also provide [pre trained model weights](https://drive.google.com/drive/folders/1KrIAhsEd3BOKAZOPIHJY3MW9-kw3oAgS?usp=sharing), you can download this file and unzip to base directory.
 
@@ -27,9 +27,9 @@ Each model can be trained by the following formats:
 
 
 ```bash
-cd ./<dataset_name>
-python train.py
+python train.py --config <config path>
 ```
+`<config path>` is the path if config file path, some config provided in `./configs/`
 
 
 ## Testing
@@ -42,28 +42,33 @@ python train.py
 
   For IS and FID testing, we follow the work of [LDAGAN](https://github.com/Sumching/LDAGAN), the code is written by TensorFlow, if you want to calculate IS and FID score for CIFAR-10 experiments, you can do it by the following steps:
 
-  Downloading 
-
-  Opening  ``./CIFAR-10/utils/sample_fake_images2npy.py``
+  Opening  ``./utils/sample_fake_images2npy.py``
 
   Setting ``model_dir`` to be the directory where the final trained models are saved.
-
-  Running:
 
   In Pytorch environment:
 
   ```bash
-  cd ./CoDeGAN/CIFAR-10/utils/
+  cd .utils/
   $ python sample_fake_images2npy.py
   ```
 
   In TensorFlow environment:
 
   ```bash
-  cd ./CoDeGAN/CIFAR-10/test/
-  $ python test_IS&FID.py
+  cd ./test/
+  $ python test_IS&FID_tf.py
   ```
 
+
+  We also provied the PyTorch version to calculate FID, you can do it by the following steps:
+  Running:
+
+  In Pytorch environment:
+  ```bash
+  cd ./test/
+  $ python test_FID_pt.py
+  ```
 ## Result
 
 <div align=center><img src="./Figure/codegan.png"></div>
