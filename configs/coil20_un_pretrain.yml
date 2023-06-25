@@ -48,3 +48,9 @@ few_labels_path: '.'
 
 # Dataset name:
 dataset: 'coil20'
+
+# ema
+use_ema: False
+
+# critic G and 1 D
+critic: 1

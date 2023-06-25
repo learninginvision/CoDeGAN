@@ -182,7 +182,7 @@ class Solver():
         d_fake_detach = self.D(fake.detach())
         return d_real, d_fake_detach
 
-    def optimize_parametersD(self, batch_size, data):
+    def optimize_parametersD(self, data, batch_size=None):
         batch_size = self.d_batch_size if batch_size == None else batch_size
         self.set_requires_grad(self.D,  True )
         self.set_requires_grad(self.G,  False)

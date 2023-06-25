@@ -51,3 +51,8 @@ few_labels_path: './fashionmnist_data/100_real_images.pt'
 
 # Dataset name:
 dataset: 'fashion'
+# ema
+use_ema: False
+
+# critic G and 1 D
+critic: 1

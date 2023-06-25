@@ -50,14 +50,14 @@ python train.py --config <config path>
 
   ```bash
   cd .utils/
-  $ python sample_fake_images2npy.py
+  python sample_fake_images2npy.py
   ```
 
   In TensorFlow environment:
 
   ```bash
   cd ./test/
-  $ python test_IS&FID_tf.py
+  python test_IS&FID_tf.py
   ```
 
 
@@ -67,7 +67,7 @@ python train.py --config <config path>
   In Pytorch environment:
   ```bash
   cd ./test/
-  $ python test_FID_pt.py
+  python test_FID_pt.py --model <model path> --config <config path>
   ```
 ## Result
 
