@@ -142,3 +142,5 @@ Dataset_Pretrain_Weight/
 Result/
 dataset/
 train.sh
+test/tmp
+*.npz
