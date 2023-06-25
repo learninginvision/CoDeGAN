@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from   torch import autograd
-from   utils.util import *
+from   utils.util import train_transform_simple, sample_noise, calc_gradient_penalty
 from   utils.sup_contrastive_loss import SupConLoss
 from models.FashionMNIST.model import Generator, Discriminator, Encoder
 
@@ -45,7 +45,7 @@ class Solver():
         d_fake = self.D(fake_q)
 
         # add contrastive
-        fake_k = train_transform(fake_q).to(self.device)
+        fake_k = train_transform_simple(fake_q).to(self.device)
 
         fz, fc_q = self.E(fake_q)
         _,  fc_k = self.E(fake_k)
@@ -54,7 +54,7 @@ class Solver():
         if real_data is not None:
             (real_q, real_label) = real_data
             real_q = real_q.to(self.device)
-            real_k = train_transform(real_q)
+            real_k = train_transform_simple(real_q)
 
             zc   = torch.cat([zc, real_label.to(self.device)], dim=0)
             fc_q = torch.cat([fc_q, self.E(real_q)[1]], dim=0)
@@ -94,7 +94,7 @@ class Solver():
     def forward_E(self, z, zc, real_data):
         # add contrastive
         fake_q = self.G(z)
-        fake_k = train_transform(fake_q)
+        fake_k = train_transform_simple(fake_q)
 
         fz, fc_q = self.E(fake_q)
         _,  fc_k = self.E(fake_k)
@@ -103,7 +103,7 @@ class Solver():
         if real_data is not None:
             (real_q, real_label) = real_data
             real_q = real_q.to(self.device)
-            real_k = train_transform(real_q)
+            real_k = train_transform_simple(real_q)
             zc     = torch.cat([zc, real_label.to(self.device)], dim=0)
             fc_q   = torch.cat([fc_q, self.E(real_q)[1]], dim=0)
             fc_k   = torch.cat([fc_k, self.E(real_k)[1]], dim=0)
@@ -181,7 +181,7 @@ class Solver():
         self.G.eval()
         self.E.eval()
         
-    def save_mode(self, save_path, epoch=0):
+    def save_model(self, save_path, epoch=0):
         torch.save(self.G.state_dict(), save_path + "/{}_G.pth".format(epoch + 1))
         torch.save(self.D.state_dict(), save_path + "/{}_D.pth".format(epoch + 1))
         torch.save(self.E.state_dict(), save_path + "/{}_E.pth".format(epoch + 1))

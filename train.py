@@ -98,11 +98,11 @@ if __name__ == "__main__":
                 if use_ema:
                     solver.ema.update(ema_iter)
 
-            dloss = solver.optimize_parametersD(d_batch_size, data)
+            dloss = solver.optimize_parametersD(data = data)
 
             # adjust learning rate
             if config['adjust_lr'] and idx % 5 == 4:
-                lr = solver.adjust_learning_rates(solver.optimizer_D )
+                lr = solver.adjust_learning_rates( )
 
         time_end = datetime.datetime.now()
 
@@ -117,11 +117,13 @@ if __name__ == "__main__":
         # test disentangle performence
         if epoch % test_step == test_step - 1:
             if hasattr(solver, 'EC'):
-                test_acc_E(solver.EC, epoch+1, save_path)
+                test_acc_E(solver.EC, epoch+1, save_path, dataset_name=config['dataset'])
+            if hasattr(solver, 'E'):
+                test_acc_E(solver.E, epoch+1, save_path, dataset_name=config['dataset'])
             if hasattr(solver, 'Classifier'):
-                test_acc_G(solver.G_EMA,solver.Classifier, epoch+1, save_path)
+                test_acc_G(solver.G_EMA,solver.Classifier, epoch+1, save_path,  dataset_name=config['dataset'])
 
-        print('[{}/{}] dloss: {:.4f} gloss: {:.4f} ecloss: {:.4f} ezloss: {:.4f} lr: {:.8f}'\
-            .format(epoch+1, max_step, dloss, gloss, ecloss, ezloss, lr))
+        print('[{}/{}] dloss: {:.4f} gloss: {:.4f} ecloss: {:.4f} ezloss: {:.4f}'\
+            .format(epoch+1, max_step, dloss, gloss, ecloss, ezloss))
         print("{:.4f} minutes...".format((time_end - time_start).seconds / 60.))        
 

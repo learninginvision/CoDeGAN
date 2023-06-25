@@ -134,10 +134,10 @@ class Solver():
         self.optimizer_EZ.step()
         return zloss.item()
 
-    def optimize_parametersE(self, ec = False):
+    def optimize_parametersE(self, real_data=None, ec = False):
         ez_loss = self.optimize_parametersEZ(batch_size=self.ez_batch_size,)
         if ec:
-            ec_loss = self.optimize_parametersEC(batch_size= self.ec_batch_size,)
+            ec_loss = self.optimize_parametersEC(batch_size= self.ec_batch_size,real_data = real_data)
         else:
             ec_loss = 0
         return ez_loss, ec_loss

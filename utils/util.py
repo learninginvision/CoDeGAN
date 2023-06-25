@@ -78,7 +78,15 @@ def train_transform(image, detach=False):
     image_tran = transform(image)
     if detach:
         return image_tran.detach()
-    return image_tran
+    return image_tran\
+
+# image augmentation
+def train_transform_simple(image):
+    transform = transforms.Compose([
+        transforms.RandomResizedCrop(size=28, scale=(0.8, 1.)),
+    ])
+
+    return transform(image).detach()
 
 def sample_noise_with_label(batch_size, zn_dim, zc_dim, device, labels):
     zn = torch.randn(batch_size, zn_dim).to(device)

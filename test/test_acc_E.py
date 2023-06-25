@@ -50,6 +50,8 @@ def test_acc_E(E, epoch_num, save_path, dataset_name='cifar10'):
     for idx, (data, label) in enumerate(testset):
         labels.append(label)
         feature = E(data.to(device))
+        if isinstance(feature, tuple):
+            feature = feature[-1]
         features.append(feature.data)
     features = torch.cat(features, dim=0)
     labels   = torch.cat(labels, dim=0).view(-1)
