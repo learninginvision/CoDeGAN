@@ -20,7 +20,7 @@ beta_2: 5
 
 # train and save step 
 critic    : 3
-save_step : 1
+save_step : 50
 chain_step: 0
 test_step : 10
 max_step  : 350

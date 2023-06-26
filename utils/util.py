@@ -64,20 +64,29 @@ def calc_gradient_penalty(real_data, generated_data, D):
 
 # image augmentation
 def train_transform(image, detach=False):
-    transform = transforms.Compose([
-        transforms.Lambda(lambda x: (x + 1.)/ 2.),
-        transforms.RandomResizedCrop(size=32, scale=(0.6, 1.)),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomApply([
-            transforms.ColorJitter(0.3, 0.3, 0.3, 0.1)
-        ], p=0.8),
-        transforms.RandomGrayscale(p=0.1),
-        transforms.Lambda(lambda x: x * 2. - 1.),
-    ])
+    if image.shape[1]==3:
+        transform = transforms.Compose([
+            transforms.Lambda(lambda x: (x + 1.)/ 2.),
+            transforms.RandomResizedCrop(size=32, scale=(0.6, 1.)),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomApply([
+                transforms.ColorJitter(0.3, 0.3, 0.3, 0.1)
+            ], p=0.8),
+            transforms.RandomGrayscale(p=0.1),
+            transforms.Lambda(lambda x: x * 2. - 1.),
+        ])
+    else:
+        transform = transforms.Compose([
+            transforms.Lambda(lambda x: (x + 1.)/ 2.),
+            transforms.RandomHorizontalFlip(),
+            transforms.Lambda(lambda x: x * 2. - 1.),
+        ])
+
 
     image_tran = transform(image)
     if detach:
         return image_tran.detach()
+    
     return image_tran\
 
 # image augmentation

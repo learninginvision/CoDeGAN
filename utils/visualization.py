@@ -5,7 +5,7 @@ import torchvision
 # visualize generated images
 def sample_fake_image(G, zn_dim, zc_dim, device):
     fake_image = []
-    for labels in range(10):
+    for labels in range(zc_dim):
         z_fc = torch.randn(10, zn_dim)
         label_f = labels * torch.ones((10, 1)).long()
         m_zeros = torch.zeros(10, zc_dim)

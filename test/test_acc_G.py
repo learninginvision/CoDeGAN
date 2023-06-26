@@ -37,11 +37,11 @@ def calculate_acc(label_kmeans, labels, num, num_class):
     return acc
 
 
-def test_acc_G(G, C, epoch_num, save_path):
+def test_acc_G(G, C, epoch_num, save_path, dataset_name = 'cifar10'):
     torch.multiprocessing.set_sharing_strategy('file_system')
     each_num = 1000
     batch_size = 100
-    num_class  = zc_dim = 20
+    num_class = zc_dim= 10 if dataset_name != 'coil20' else 20
     
     num = num_class * each_num
     cal_times  = 5
@@ -83,4 +83,4 @@ def test_acc_G(G, C, epoch_num, save_path):
         list_strings.append('%s = %.2f '%(eval_name, eval_value))
     full_string = ' '.join(list_strings)
     with open(save_path+'test_result.txt', "a") as f:
-        f.write('epoch = {} times={} {} \n'.format(epoch_num, cal_times, full_string))
+        f.write('epoch = {} times={} G {} \n'.format(epoch_num, cal_times, full_string))

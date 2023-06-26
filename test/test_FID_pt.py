@@ -17,21 +17,14 @@ parser.add_argument('--config', type=str, required= True,
 # download featrures
 # cleanfid.features.get_reference_statistics(name, res, mode="legacy_pytorch", model_name="inception_v3", seed=0, split="train", metric="FID") 
 
-if __name__ == "__main__":
-    args = parser.parse_args()
-    model_dir = args.model   # the path you save your model
-    config = yaml.load(open(args.config), Loader=yaml.FullLoader)
-    solver = get_solvers(config)
-    solver.G.load_state_dict(torch.load(model_dir, map_location=solver.device))
-    solver.G.to(solver.device)
-    solver.G.eval()
 
+
+def FID(solver, dataset_name = 'cifar10'):
     if not os.path.exists('./tmp'):
         os.mkdir('./tmp')
 
     z = sample_noise(batch_size=50000, zn_dim=solver.zn_dim, zc_dim=solver.zc_dim, device=solver.device)[0]
     batches = make_batches(50000, 25)
-    fake_images = []
     idx = 0
     for batch_idx, (batch_start, batch_end) in enumerate(batches):
         noise_batch = z[batch_start:batch_end].to(solver.device)
@@ -48,3 +41,14 @@ if __name__ == "__main__":
     exp_path = os.path.abspath(os.path.join(model_dir, "../.."))
     with open(file=os.path.join(exp_path, 'fid.txt'), mode='a') as f:
         f.write(f'FID={score}, model file= {model_dir} \n')
+        
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    model_dir = args.model   # the path you save your model
+    config = yaml.load(open(args.config), Loader=yaml.FullLoader)
+    solver = get_solvers(config)
+    solver.G.load_state_dict(torch.load(model_dir, map_location=solver.device))
+    solver.G.to(solver.device)
+    solver.G.eval()
+    FID(solver, config['dataset'])

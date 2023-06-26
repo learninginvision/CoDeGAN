@@ -39,7 +39,7 @@ def test_acc_E(E, epoch_num, save_path, dataset_name='cifar10'):
     device     = next(E.parameters()).device
     num        = 10000
     batch_size = 50
-    num_class  = 10
+    num_class  = 10 if dataset_name != 'coil20' else 20
     cal_times  = 5
     testset = get_dataloader(batch_size, dataset_name= dataset_name,train=False)
     E.eval()
@@ -81,4 +81,4 @@ def test_acc_E(E, epoch_num, save_path, dataset_name='cifar10'):
         list_strings.append('%s = %.2f '%(eval_name, eval_value))
     full_string = ' '.join(list_strings)
     with open(save_path+'test_result.txt', "a") as f:
-        f.write('epoch = {} times={} {} \n'.format(epoch_num, cal_times, full_string))
+        f.write('epoch = {} times={} E {} \n'.format(epoch_num, cal_times, full_string))

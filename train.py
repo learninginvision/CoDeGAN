@@ -54,8 +54,9 @@ if __name__ == "__main__":
     dataset = get_dataloader(d_batch_size, config['dataset'])
 
     # load pretrain_model if needed
+    load_path = config['load_path']
     if pretrain is True:
-        load_path = config['load_path']
+        
         if few_labels is True:
             solver.G.load_state_dict(torch.load(load_path + '/pre_G.pth', map_location=solver.device))
             solver.D.load_state_dict(torch.load(load_path + '/pre_D.pth', map_location=solver.device))
@@ -65,9 +66,9 @@ if __name__ == "__main__":
             solver.EC.load_state_dict(torch.load(load_path + '/pre_EC.pth', map_location=solver.device))
         if hasattr(solver, 'E'):
             solver.EC.load_state_dict(torch.load(load_path + '/pre_E.pth', map_location=solver.device))
-        if hasattr(solver, 'Classifier'):
-            solver.Classifier.load_state_dict(torch.load(load_path + '/classifier.pth', map_location=solver.device))
-
+    if hasattr(solver, 'Classifier'):
+        solver.Classifier.load_state_dict(torch.load(load_path + '/Classifier.pth', map_location=solver.device))
+        solver.Classifier.eval()
 
     print("start...")
 
@@ -116,12 +117,14 @@ if __name__ == "__main__":
 
         # test disentangle performence
         if epoch % test_step == test_step - 1:
-            if hasattr(solver, 'EC'):
-                test_acc_E(solver.EC, epoch+1, save_path, dataset_name=config['dataset'])
-            if hasattr(solver, 'E'):
-                test_acc_E(solver.E, epoch+1, save_path, dataset_name=config['dataset'])
+            
             if hasattr(solver, 'Classifier'):
-                test_acc_G(solver.G_EMA,solver.Classifier, epoch+1, save_path,  dataset_name=config['dataset'])
+                test_acc_G(solver.G,solver.Classifier, epoch+1, save_path, dataset_name=config['dataset'])
+            elif hasattr(solver, 'EC'):
+                test_acc_E(solver.EC, epoch+1, save_path, dataset_name=config['dataset'])
+            elif hasattr(solver, 'E'):
+                test_acc_E(solver.E, epoch+1, save_path, dataset_name=config['dataset'])
+
 
         print('[{}/{}] dloss: {:.4f} gloss: {:.4f} ecloss: {:.4f} ezloss: {:.4f}'\
             .format(epoch+1, max_step, dloss, gloss, ecloss, ezloss))

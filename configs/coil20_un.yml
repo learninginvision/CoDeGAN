@@ -32,7 +32,10 @@ loss_metric: 'wgan-gp'
 temp_C: 0.07
 
 # choose train mode
+few_labels: False
 pretrain: False
+meta: False
+use_ema: False
 
 # which gpu is choosed
 gpu_id: 0
@@ -51,6 +54,3 @@ dataset: 'coil20'
 
 # ema
 use_ema: False
-
-# critic G and 1 D
-critic: 1
