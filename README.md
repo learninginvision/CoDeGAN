@@ -38,7 +38,7 @@ python train.py --config <config path>
 
   The ACC, NMI, ARI are calculated by ``./<dataset_name>/test.py`` in MNIST and Fashion-MNIST, ``./<dataset_name>/test/test_acc.py`` in CIFAR-10, which will be calculated automatically during training, the test result will be saved in  ``./<dataset_name>/result/<rand int>/test_result.txt``.
 
-- **IS, FID**
+- **IS, FID using Tensorflow**
 
   For IS and FID testing, we follow the work of [LDAGAN](https://github.com/Sumching/LDAGAN), the code is written by TensorFlow, if you want to calculate IS and FID score for CIFAR-10 experiments, you can do it by the following steps:
 
@@ -60,16 +60,29 @@ python train.py --config <config path>
   python test_IS&FID_tf.py
   ```
 
+- **FID using PyTorch**
 
-  We also provied the PyTorch version to calculate FID, you can do it by the following steps:
+  We also provied the PyTorch version to calculate FID, using `clean-fid`. You can do it by the following steps:
+
   Running:
 
   In Pytorch environment:
   ```bash
+  pip install cleanfid
   cd ./test/
   python test_FID_pt.py --model <model path> --config <config path>
   ```
 ## Result
 
-<div align=center><img src="./Figure/codegan.png"></div>
+<div align=center><img src="./Figure/codegan.png" style="zoom:50%"></div>
 <div align="center">Qualitative comparison with state-of-the-art methods on the Fashion-MNIST, COIL-20 and CIFAR-10 datasets.</div>
+
+<div align=center><img src="./Figure/Cifar10_CoDeGAN_pre.png" width = "400" height = "" alt="CIFAR-10" align=center /></div>
+<div align="center">CIFAR-10</div>
+
+<div align=center><img src="./Figure/Fashion_CoDeGAN_pre.png" width = "400" height = "" alt="FashionMNIST" align=center /></div>
+<div align="center">Fashion-MNIST</div>
+
+
+<div align=center><img src="./Figure/coil-20_CoDeGAN_pre.png" width = "400" height = "" alt="COIL-20" align=center /></div>
+<div align="center">COIL-20</div>
