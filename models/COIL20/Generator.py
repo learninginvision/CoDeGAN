@@ -18,7 +18,7 @@ class GenBlock(nn.Module):
         )
         self.shortcut = nn.Sequential(
             nn.Upsample(scale_factor=2),
-            nn.Conv2d(in_channels, out_channels, 1, stride=1, padding=0)
+            nn.Conv2d(in_channels, out_channels, 1, stride=1, padding=0),
         )
         self.initialize()
 
@@ -66,5 +66,5 @@ class Generator(nn.Module):
     def forward(self, z):
         z = self.linear(z)
         z = z.view(-1, 256, 4, 4)
-        z =self.blocks(z)
+        z = self.blocks(z)
         return self.output(z)

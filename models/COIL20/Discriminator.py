@@ -8,13 +8,14 @@ class OptimizedDisblock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()
         self.shortcut = nn.Sequential(
-            nn.AvgPool2d(2),
-            nn.Conv2d(in_channels, out_channels, 1, 1, 0))
+            nn.AvgPool2d(2), nn.Conv2d(in_channels, out_channels, 1, 1, 0)
+        )
         self.residual = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, 3, 1, 1),
             nn.ReLU(),
             nn.Conv2d(out_channels, out_channels, 3, 1, 1),
-            nn.AvgPool2d(2))
+            nn.AvgPool2d(2),
+        )
         self.initialize()
 
     def initialize(self):
@@ -36,8 +37,7 @@ class DisBlock(nn.Module):
         super().__init__()
         shortcut = []
         if in_channels != out_channels or down:
-            shortcut.append(
-                nn.Conv2d(in_channels, out_channels, 1, 1, 0))
+            shortcut.append(nn.Conv2d(in_channels, out_channels, 1, 1, 0))
         if down:
             shortcut.append(nn.AvgPool2d(2))
         self.shortcut = nn.Sequential(*shortcut)
@@ -64,7 +64,7 @@ class DisBlock(nn.Module):
                 init.zeros_(m.bias)
 
     def forward(self, x):
-        return (self.residual(x) + self.shortcut(x))
+        return self.residual(x) + self.shortcut(x)
 
 
 class Discriminator(nn.Module):
@@ -75,7 +75,8 @@ class Discriminator(nn.Module):
             DisBlock(128, 128, down=True),
             DisBlock(128, 128),
             DisBlock(128, 128),
-            nn.ReLU())
+            nn.ReLU(),
+        )
         self.linear = nn.Linear(128, 1)
         self.initialize()
 

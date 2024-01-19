@@ -145,3 +145,4 @@ train.sh
 test/tmp
 *.npz
 coil20_data/
+.history/

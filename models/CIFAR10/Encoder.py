@@ -15,16 +15,26 @@ class BasicBlock(nn.Module):
     def __init__(self, in_planes, planes, stride=1, is_last=False):
         super(BasicBlock, self).__init__()
         self.is_last = is_last
-        self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(
+            in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False
+        )
         self.bn1 = nn.BatchNorm2d(planes)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(
+            planes, planes, kernel_size=3, stride=1, padding=1, bias=False
+        )
         self.bn2 = nn.BatchNorm2d(planes)
 
         self.shortcut = nn.Sequential()
         if stride != 1 or in_planes != self.expansion * planes:
             self.shortcut = nn.Sequential(
-                nn.Conv2d(in_planes, self.expansion * planes, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(self.expansion * planes)
+                nn.Conv2d(
+                    in_planes,
+                    self.expansion * planes,
+                    kernel_size=1,
+                    stride=stride,
+                    bias=False,
+                ),
+                nn.BatchNorm2d(self.expansion * planes),
             )
 
     def forward(self, x):
@@ -47,16 +57,26 @@ class Bottleneck(nn.Module):
         self.is_last = is_last
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
-        self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(
+            planes, planes, kernel_size=3, stride=stride, padding=1, bias=False
+        )
         self.bn2 = nn.BatchNorm2d(planes)
-        self.conv3 = nn.Conv2d(planes, self.expansion * planes, kernel_size=1, bias=False)
+        self.conv3 = nn.Conv2d(
+            planes, self.expansion * planes, kernel_size=1, bias=False
+        )
         self.bn3 = nn.BatchNorm2d(self.expansion * planes)
 
         self.shortcut = nn.Sequential()
         if stride != 1 or in_planes != self.expansion * planes:
             self.shortcut = nn.Sequential(
-                nn.Conv2d(in_planes, self.expansion * planes, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(self.expansion * planes)
+                nn.Conv2d(
+                    in_planes,
+                    self.expansion * planes,
+                    kernel_size=1,
+                    stride=stride,
+                    bias=False,
+                ),
+                nn.BatchNorm2d(self.expansion * planes),
             )
 
     def forward(self, x):
@@ -77,8 +97,9 @@ class ResNet(nn.Module):
         super(ResNet, self).__init__()
         self.in_planes = 64
 
-        self.conv1 = nn.Conv2d(in_channel, 64, kernel_size=3, stride=1, padding=1,
-                               bias=False)
+        self.conv1 = nn.Conv2d(
+            in_channel, 64, kernel_size=3, stride=1, padding=1, bias=False
+        )
         self.bn1 = nn.BatchNorm2d(64)
         self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
@@ -88,7 +109,7 @@ class ResNet(nn.Module):
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
@@ -141,30 +162,30 @@ def resnet101(**kwargs):
 
 
 model_dict = {
-    'resnet18': [resnet18, 512],
-    'resnet34': [resnet34, 512],
-    'resnet50': [resnet50, 2048],
-    'resnet101': [resnet101, 2048],
+    "resnet18": [resnet18, 512],
+    "resnet34": [resnet34, 512],
+    "resnet50": [resnet50, 2048],
+    "resnet101": [resnet101, 2048],
 }
 
 
 class SupConResNet(nn.Module):
     """backbone + projection head"""
-    def __init__(self, name='resnet50', head='mlp', feat_dim=128):
+
+    def __init__(self, name="resnet50", head="mlp", feat_dim=128):
         super(SupConResNet, self).__init__()
         model_fun, dim_in = model_dict[name]
         self.encoder = model_fun()
-        if head == 'linear':
+        if head == "linear":
             self.head = nn.Linear(dim_in, feat_dim)
-        elif head == 'mlp':
+        elif head == "mlp":
             self.head = nn.Sequential(
                 nn.Linear(dim_in, dim_in),
                 nn.ReLU(inplace=True),
-                nn.Linear(dim_in, feat_dim)
+                nn.Linear(dim_in, feat_dim),
             )
         else:
-            raise NotImplementedError(
-                'head not supported: {}'.format(head))
+            raise NotImplementedError("head not supported: {}".format(head))
 
     def forward(self, x):
         feat = self.encoder(x)
@@ -174,21 +195,21 @@ class SupConResNet(nn.Module):
 
 class SupConResNetZ(nn.Module):
     """backbone + projection head"""
-    def __init__(self, name='resnet50', head='mlp', feat_dim=128):
+
+    def __init__(self, name="resnet50", head="mlp", feat_dim=128):
         super(SupConResNetZ, self).__init__()
         model_fun, dim_in = model_dict[name]
         self.encoder = model_fun()
-        if head == 'linear':
+        if head == "linear":
             self.head = nn.Linear(dim_in, feat_dim)
-        elif head == 'mlp':
+        elif head == "mlp":
             self.head = nn.Sequential(
                 nn.Linear(dim_in, dim_in),
                 nn.ReLU(inplace=True),
-                nn.Linear(dim_in, feat_dim)
+                nn.Linear(dim_in, feat_dim),
             )
         else:
-            raise NotImplementedError(
-                'head not supported: {}'.format(head))
+            raise NotImplementedError("head not supported: {}".format(head))
 
     def forward(self, x):
         feat = self.encoder(x)
@@ -196,168 +217,157 @@ class SupConResNetZ(nn.Module):
 
 
 def Encoder_arch(fc_dim):
-    return   [
-            # input block
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [64, 3, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [64]),
-            ('relu', [False]),
-
-            # resblock 1-1
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [64, 64, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [64]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [64, 64, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [64]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 1-2
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [64, 64, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [64]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [64, 64, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [64]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 2-1
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [128, 64, 3, 3, 2, 1]),
-            # [ch_out]
-            ('bn', [128]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [128, 128, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [128]),
-            # shotcut
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('shotcut_conv2d', [128, 64, 1, 1, 2, 0]),
-            # [ch_out]
-            ('shotcut_bn', [128]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 2-2
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [128, 128, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [128]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [128, 128, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [128]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 3-1
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [256, 128, 3, 3, 2, 1]),
-            # [ch_out]
-            ('bn', [256]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [256, 256, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [256]),
-            # shotcut
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('shotcut_conv2d', [256, 128, 1, 1, 2, 0]),
-            # [ch_out]
-            ('shotcut_bn', [256]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 3-2
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [256, 256, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [256]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [256, 256, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [256]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 4-1
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [512, 256, 3, 3, 2, 1]),
-            # [ch_out]
-            ('bn', [512]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [512, 512, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [512]),
-            # shotcut
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('shotcut_conv2d', [512, 256, 1, 1, 2, 0]),
-            # [ch_out]
-            ('shotcut_bn', [512]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # resblock 4-2
-            # copy input for shotcut
-            ('block_input', []),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [512, 512, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [512]),
-            ('relu', [False]),
-            # [ch_out, ch_in, kernelsz, kernelsz]
-            ('conv2d', [512, 512, 3, 3, 1, 1]),
-            # [ch_out]
-            ('bn', [512]),
-            # output after shotcut
-            ('block_output', []),
-            ('relu', [False]),
-
-            # [output_size]
-            ('adpt_avg_pool2d', [(1, 1)]),
-
-            ('flatten', []),
-
-            # projection head
-            # [ch_out, ch_in]
-            ('linear', [512, 512]),
-            ('relu', [True]),
-            # [ch_out, ch_in]
-            ('linear', [fc_dim, 512]),
-            # [dim]
-            ('normalize', [1]),
-            ]
+    return [
+        # input block
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [64, 3, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [64]),
+        ("relu", [False]),
+        # resblock 1-1
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [64, 64, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [64]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [64, 64, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [64]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 1-2
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [64, 64, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [64]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [64, 64, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [64]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 2-1
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [128, 64, 3, 3, 2, 1]),
+        # [ch_out]
+        ("bn", [128]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [128, 128, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [128]),
+        # shotcut
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("shotcut_conv2d", [128, 64, 1, 1, 2, 0]),
+        # [ch_out]
+        ("shotcut_bn", [128]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 2-2
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [128, 128, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [128]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [128, 128, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [128]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 3-1
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [256, 128, 3, 3, 2, 1]),
+        # [ch_out]
+        ("bn", [256]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [256, 256, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [256]),
+        # shotcut
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("shotcut_conv2d", [256, 128, 1, 1, 2, 0]),
+        # [ch_out]
+        ("shotcut_bn", [256]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 3-2
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [256, 256, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [256]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [256, 256, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [256]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 4-1
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [512, 256, 3, 3, 2, 1]),
+        # [ch_out]
+        ("bn", [512]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [512, 512, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [512]),
+        # shotcut
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("shotcut_conv2d", [512, 256, 1, 1, 2, 0]),
+        # [ch_out]
+        ("shotcut_bn", [512]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # resblock 4-2
+        # copy input for shotcut
+        ("block_input", []),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [512, 512, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [512]),
+        ("relu", [False]),
+        # [ch_out, ch_in, kernelsz, kernelsz]
+        ("conv2d", [512, 512, 3, 3, 1, 1]),
+        # [ch_out]
+        ("bn", [512]),
+        # output after shotcut
+        ("block_output", []),
+        ("relu", [False]),
+        # [output_size]
+        ("adpt_avg_pool2d", [(1, 1)]),
+        ("flatten", []),
+        # projection head
+        # [ch_out, ch_in]
+        ("linear", [512, 512]),
+        ("relu", [True]),
+        # [ch_out, ch_in]
+        ("linear", [fc_dim, 512]),
+        # [dim]
+        ("normalize", [1]),
+    ]

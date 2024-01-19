@@ -10,19 +10,33 @@ def _downsample(x):
 
 
 class disBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, hidden_channels=None, ksize=3, pad=1,
-                 activation=F.relu, downsample=False):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        hidden_channels=None,
+        ksize=3,
+        pad=1,
+        activation=F.relu,
+        downsample=False,
+    ):
         super(disBlock, self).__init__()
         self.activation = activation
         self.downsample = downsample
         self.learnable_sc = (in_channels != out_channels) or downsample
         hidden_channels = in_channels if hidden_channels is None else hidden_channels
-        self.c1 = nn.utils.spectral_norm(nn.Conv2d(in_channels, hidden_channels, kernel_size=ksize, padding=pad))
+        self.c1 = nn.utils.spectral_norm(
+            nn.Conv2d(in_channels, hidden_channels, kernel_size=ksize, padding=pad)
+        )
         nn.init.xavier_uniform_(self.c1.weight.data, math.sqrt(2))
-        self.c2 = nn.utils.spectral_norm(nn.Conv2d(hidden_channels, out_channels, kernel_size=ksize, padding=pad))
+        self.c2 = nn.utils.spectral_norm(
+            nn.Conv2d(hidden_channels, out_channels, kernel_size=ksize, padding=pad)
+        )
         nn.init.xavier_uniform_(self.c2.weight.data, math.sqrt(2))
         if self.learnable_sc:
-            self.c_sc = nn.utils.spectral_norm(nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0))
+            self.c_sc = nn.utils.spectral_norm(
+                nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0)
+            )
             nn.init.xavier_uniform_(self.c_sc.weight.data)
 
     def residual(self, x):
@@ -53,11 +67,17 @@ class OptimizedBlock(nn.Module):
     def __init__(self, in_channels, out_channels, ksize=3, pad=1, activation=F.relu):
         super(OptimizedBlock, self).__init__()
         self.activation = activation
-        self.c1 = nn.utils.spectral_norm(nn.Conv2d(in_channels, out_channels, kernel_size=ksize, padding=pad))
+        self.c1 = nn.utils.spectral_norm(
+            nn.Conv2d(in_channels, out_channels, kernel_size=ksize, padding=pad)
+        )
         nn.init.xavier_uniform_(self.c1.weight.data, math.sqrt(2))
-        self.c2 = nn.utils.spectral_norm(nn.Conv2d(out_channels, out_channels, kernel_size=ksize, padding=pad))
+        self.c2 = nn.utils.spectral_norm(
+            nn.Conv2d(out_channels, out_channels, kernel_size=ksize, padding=pad)
+        )
         nn.init.xavier_uniform_(self.c2.weight.data, math.sqrt(2))
-        self.c_sc = nn.utils.spectral_norm(nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0))
+        self.c_sc = nn.utils.spectral_norm(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, padding=0)
+        )
         nn.init.xavier_uniform_(self.c_sc.weight.data)
 
     def residual(self, x):
@@ -86,17 +106,18 @@ class Discriminator(nn.Module):
         self.l5 = nn.utils.spectral_norm(nn.Linear(ch, 1, bias=False))
         nn.init.xavier_uniform_(self.l5.weight.data)
         self.initial()
-    
+
     def initial(self):
         def weights_init(m):
             classname = m.__class__.__name__
-            if classname.find('Conv2d') != -1:
+            if classname.find("Conv2d") != -1:
                 nn.init.constant_(m.bias.data, 0)
-            elif classname.find('BatchNorm') != -1:
+            elif classname.find("BatchNorm") != -1:
                 nn.init.normal_(m.weight.data, 1.0, 0.02)
                 nn.init.constant_(m.bias.data, 0)
+
         self.apply(weights_init)
-        
+
     def forward(self, input):
         h = input
         h = self.block1(h)
@@ -104,7 +125,7 @@ class Discriminator(nn.Module):
         h = self.block3(h)
         h = self.block4(h)
         h = self.activation(h)
-        h = torch.sum(h, dim=(2,3))
+        h = torch.sum(h, dim=(2, 3))
         output = self.l5(h)
         return output
 
@@ -113,10 +134,10 @@ def weights_init(m):
     classname = m.__class__.__name__
     print(m)
     print(classname)
-    if classname.find('Conv2d') != -1:
+    if classname.find("Conv2d") != -1:
         nn.init.constant_(m.bias.data, 0)
-    elif classname.find('Linear') != -1:
+    elif classname.find("Linear") != -1:
         nn.init.xavier_uniform_(m.weight.data)
-    elif classname.find('BatchNorm') != -1:
+    elif classname.find("BatchNorm") != -1:
         nn.init.normal_(m.weight.data, 1.0, 0.02)
         nn.init.constant_(m.bias.data, 0)
