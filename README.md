@@ -124,17 +124,17 @@ After training, you can get model checkpoints in the folder `./Result/exp_name`,
 ## Result
 
 <div align=center>
-<img src="./Figure/codegan.png" style="zoom:50%">
+<img src="./Figure/codegan.png" width = "400" height = "">
 
 Qualitative comparison with state-of-the-art methods on the Fashion-MNIST, COIL-20 and CIFAR-10 datasets.
 </div>
 
-<div align=center><img src="./Figure/Cifar10_CoDeGAN_pre.png" width = "400" height = "" alt="CIFAR-10" align=center />
+<div align=center><img src="./Figure/Cifar10_CoDeGAN_pre.png" width = "400" height = "" align=center />
 
 Qualitative Result on CIFAR-10
 </div>
 
-<div align=center><img src="./Figure/Fashion_CoDeGAN_pre.png" width = "400" height = "" alt="FashionMNIST" align=center />
+<!-- <div align=center><img src="./Figure/Fashion_CoDeGAN_pre.png" width = "400" height = "" alt="FashionMNIST" align=center />
 
 Qualitative Result on Fashion-MNIST
 </div>
@@ -142,5 +142,5 @@ Qualitative Result on Fashion-MNIST
 
 <div align=center><img src="./Figure/coil-20_CoDeGAN_pre.png" width = "400" height = "" alt="COIL-20" align=center />
 
-Qualitative Result on COIL-20</div>
+Qualitative Result on COIL-20</div> -->
 
