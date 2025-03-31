@@ -2,9 +2,9 @@
 
 
 
-> **CoDeGAN: Contrastive Disentanglement for Generative Adversarial Networks** <br>
-> Jiangwei Zhao, Zejia Liu, Xiaohan Guo, Lili Pan <br>
-> IEEE Transactions on Multimedia (submitted)
+> **CoDeGAN: Contrastive Disentanglement for Generative Adversarial Network** <br>
+> Zejia Liu, Lili Pan, Xiaohan Guo, Jiangwei Zhao  <br>
+> Neurocomputing (accepted)
 
 > **Abstract**: Disentanglement, as an important issue of interpretable AI, has attracted vast attention of computer vision community.
 In contrast to VAE-based disentanglement, GAN-based disentanglement is extremely hard as GANs do not have explicit sample likelihood and forbidden posterior inference.  	
